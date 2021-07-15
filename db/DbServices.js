@@ -1,8 +1,7 @@
 const typeorm = require("typeorm");
 const cdbConfig = require("../config/mysqlConfig");
 
-const connection = await this._getConnection();
-const todoRepository = connection.getRepository("todo");
+
 class DbServices {
 
     constructor() {
@@ -51,9 +50,11 @@ class DbServices {
     insertData(obj) {
         return new Promise(async resolve => {
             // obj.created_at=this._formatDate(new Date().getTime())
+            const connection = await this._getConnection();
+            const todoRepository = connection.getRepository("todo");
             todoRepository.save(obj)
-                .then(function (savedtodo) {
-                    resolve(savedtodo);
+                .then(function (savedToDo) {
+                    resolve(savedToDo);
                 }, function (e) {
                     console.log(e)
                 })
@@ -66,6 +67,8 @@ class DbServices {
      */
     deleteData(obj) {
         return new Promise(async resolve => {
+            const connection = await this._getConnection();
+            const todoRepository = connection.getRepository("todo");
             // obj.deleted_at=this._formatDate(new Date().getTime())
             todoRepository.save(obj)
                 .then(function (rmdtodo) {
@@ -81,6 +84,8 @@ class DbServices {
      * @param obj
      */
     updateData(obj) {
+        const connection = this._getConnection();
+        const todoRepository = connection.getRepository("todo");
         return async resolve => {
             todoRepository.save(obj)
                 .then(function (obj) {
@@ -96,10 +101,12 @@ class DbServices {
      * @param obj
      */
     listData(obj) {
+        const connection = this._getConnection();
+        const todoRepository = connection.getRepository("todo");
         return async resolve => {
             todoRepository.find({ deleted_at: null })
-                .then(function (alltodo) {
-                    resolve(alltodo);
+                .then(function (allToDo) {
+                    resolve(allToDo);
                 }, function (e) {
                     console.log(e)
                 })
